@@ -1,197 +1,242 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, Mail, HelpCircle, LifeBuoy } from "lucide-react"; // Imported new icons
+import { 
+  Menu, 
+  X, 
+  Phone, 
+  Mail, 
+  ChevronDown,
+  Users,
+  Wrench,
+  Cpu,
+  Gamepad2,
+  Shield,
+  Rocket,
+  Building2,
+  School,
+  Handshake,
+  Trophy,
+} from "lucide-react";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [projectsDropdown, setProjectsDropdown] = useState(false);
+  const [aboutDropdown, setAboutDropdown] = useState(false);
+
+  const [mobileProjectsOpen, setMobileProjectsOpen] = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+
+  const aboutRef = useRef(null);
+  const projectsRef = useRef(null);
+
   const location = useLocation();
-  
-  // Primary Navigation Links
+
   const navItems = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
+    { name: "About", path: "/about", dropdown: true },
     { name: "Blogs", path: "/blogs" },
     { name: "Events", path: "/events" },
-    { name: "Projects", path: "/projects" },
+    { name: "Projects", path: "/projects", dropdown: true },
     { name: "Discussion", path: "/discussion" },
+    { name: "Career", path: "/career" },
     { name: "Contact", path: "/contact" },
   ];
 
-  // Utility Links (FAQ/Support)
-  const utilityItems = [
-    { name: "FAQ", path: "/faq", icon: <HelpCircle className="h-4 w-4 mr-1 text-techgold" /> },
-    { name: "Help Desk", path: "/help", icon: <LifeBuoy className="h-4 w-4 mr-1 text-techgold" /> },
-    { name: "Support", path: "/support", icon: <LifeBuoy className="h-4 w-4 mr-1 text-techgold" /> },
+  const projectDropdownLinks = [
+    { name: "Developers Community Hub", path: "/projects/community", icon: <Users className="text-techgold w-4 h-4" /> },
+    { name: "Tech Workshops & Bootcamps", path: "/projects/workshops", icon: <Wrench className="text-techgold w-4 h-4" /> },
+    { name: "Cybersecurity Squad", path: "/projects/security", icon: <Shield className="text-techgold w-4 h-4" /> },
+    { name: "AI & Robotics Unit", path: "/projects/ai-robotics", icon: <Cpu className="text-techgold w-4 h-4" /> },
+    { name: "Web & Mobile Dev Missions", path: "/projects/missions", icon: <Rocket className="text-techgold w-4 h-4" /> },
+    { name: "Gaming & Innovation League", path: "/projects/gaming", icon: <Gamepad2 className="text-techgold w-4 h-4" /> },
+  ];
+
+  const aboutDropdownLinks = [
+    { name: "Who We Are", path: "/about/who-we-are", icon: <Users className="text-techgold w-4 h-4" /> },
+    { name: "Leadership & Governance", path: "/about/leadership", icon: <Building2 className="text-techgold w-4 h-4" /> },
+    { name: "Our Community", path: "/about/community", icon: <Users className="text-techgold w-4 h-4" /> },
+    { name: "Innovation & Impact", path: "/about/impact", icon: <Wrench className="text-techgold w-4 h-4" /> },
+    { name: "Our Journey", path: "/about/journey", icon: <Rocket className="text-techgold w-4 h-4" /> },
+    { name: "Tech Programs", path: "/about/programs", icon: <School className="text-techgold w-4 h-4" /> },
+    { name: "Meet the Team", path: "/about/team", icon: <Users className="text-techgold w-4 h-4" /> },
+    { name: "Tech Partnerships", path: "/about/partnerships", icon: <Handshake className="text-techgold w-4 h-4" /> },
+    { name: "Awards & Recognition", path: "/about/awards", icon: <Trophy className="text-techgold w-4 h-4" /> },
+    { name: "Membership & Benefits", path: "/about/membership", icon: <Shield className="text-techgold w-4 h-4" /> },
   ];
 
   const CONTACT_PHONE = "0115000514";
-  const CONTACT_EMAIL = "info@techteam.org"; // Example email
+  const CONTACT_EMAIL = "info@techteam.org";
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+  const isActive = (path: string) => location.pathname === path;
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        aboutRef.current && !aboutRef.current.contains(e.target) &&
+        projectsRef.current && !projectsRef.current.contains(e.target)
+      ) {
+        setProjectsDropdown(false);
+        setAboutDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-white sticky top-0 z-50">
 
-      {/* 🚀 1. TOP BAR (Utility & Contacts) - High Contrast/Accessibility */}
+      {/* TOP BAR */}
       <div className="bg-gray-900 text-gray-300 text-sm py-2 hidden md:block border-b border-techgold/20">
         <div className="container-custom flex justify-between items-center">
-          
-          {/* Contacts */}
           <div className="flex items-center space-x-6">
-            <a 
-              href={`tel:${CONTACT_PHONE}`} 
-              className="flex items-center hover:text-techgold transition-colors"
-              aria-label={`Call us at ${CONTACT_PHONE}`}
-            >
-              <Phone className="h-4 w-4 mr-1 text-techgold" />
-              {CONTACT_PHONE}
+            <a href={`tel:${CONTACT_PHONE}`} className="flex items-center hover:text-techgold">
+              <Phone className="h-4 w-4 mr-1 text-techgold" />{CONTACT_PHONE}
             </a>
-            <a 
-              href={`mailto:${CONTACT_EMAIL}`} 
-              className="flex items-center hover:text-techgold transition-colors"
-              aria-label={`Email us at ${CONTACT_EMAIL}`}
-            >
-              <Mail className="h-4 w-4 mr-1 text-techgold" />
-              {CONTACT_EMAIL}
+            <a href={`mailto:${CONTACT_EMAIL}`} className="flex items-center hover:text-techgold">
+              <Mail className="h-4 w-4 mr-1 text-techgold" />{CONTACT_EMAIL}
             </a>
           </div>
-
-          {/* Utility Links */}
-          <div className="flex items-center space-x-4">
-            {utilityItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="flex items-center hover:text-techgold transition-colors"
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            ))}
-          </div>
-
         </div>
       </div>
 
-      {/* 🧭 2. MAIN NAVBAR - Branding and Primary Navigation */}
-      <div className="shadow-md"> {/* Added stronger shadow to main bar */}
+      {/* MAIN NAV */}
+      <div className="shadow-md">
         <div className="container-custom flex justify-between items-center py-4">
-          
-          {/* Logo & Brand */}
+
           <Link to="/" className="flex items-center space-x-2 group">
-            {/* UI: Reduced logo size slightly to fit the two-tier structure better, added hover effect */}
-            <img 
-              src="/tech team logo.png" 
-              alt="Tech Team Logo" 
-              className="h-10 w-10 rounded-full object-cover border-2 border-techblue group-hover:border-techgold transition-colors duration-300" 
-            />
-            {/* UI: Used techgold for primary text accent */}
-            <span className="font-extrabold text-2xl text-gray-900 group-hover:text-techgold transition-colors duration-300">Tech Team</span>
+            <img src="/tech team logo.png" className="h-10 w-10 rounded-full border-2 border-techblue group-hover:border-techgold transition" />
+            <span className="font-extrabold text-2xl text-gray-900 group-hover:text-techgold transition">Tech Team</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`
-                  px-3 py-2 rounded-lg text-base font-semibold transition-all duration-300 
-                  ${
-                    isActive(item.path)
-                      ? "text-techgold bg-techgold/10 border-b-2 border-techgold" // Active state improved
-                      : "text-gray-700 hover:text-techgold hover:bg-gray-100" // Hover state improved
-                  }
-                `}
-              >
-                {item.name}
-              </Link>
+          <div className="hidden md:flex items-center gap-2 relative">
+
+            {navItems.map(item => (
+              item.dropdown ? (
+                <div
+                  key={item.name}
+                  ref={item.name === "Projects" ? projectsRef : aboutRef}
+                  className="relative"
+                >
+                  <button
+                    onClick={() => {
+                      if (item.name === "Projects") {
+                        setProjectsDropdown(!projectsDropdown);
+                        setAboutDropdown(false);
+                      } else {
+                        setAboutDropdown(!aboutDropdown);
+                        setProjectsDropdown(false);
+                      }
+                    }}
+                    className={`flex items-center px-3 py-2 font-semibold transition
+                      ${isActive(item.path)
+                        ? "text-techgold border-b-2 border-techgold"
+                        : "text-gray-700 hover:text-techgold"}`}
+                  >
+                    {item.name}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </button>
+
+                  {item.name === "Projects" && projectsDropdown && (
+                    <div className="absolute left-0 mt-2 bg-white w-[620px] border border-gray-200 rounded-md p-6 z-50 shadow-lg grid grid-cols-2 gap-4">
+                      {projectDropdownLinks.map(link => (
+                        <Link key={link.name} to={link.path} className="flex items-center gap-3 py-2 hover:text-techgold text-gray-700 text-sm">
+                          {link.icon}
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                  {item.name === "About" && aboutDropdown && (
+                    <div className="absolute left-0 mt-2 bg-white w-[620px] border border-gray-200 rounded-md p-6 z-50 shadow-lg grid grid-cols-2 gap-4">
+                      {aboutDropdownLinks.map(link => (
+                        <Link key={link.name} to={link.path} className="flex items-center gap-3 py-2 hover:text-techgold text-gray-700 text-sm">
+                          {link.icon}
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link 
+                  key={item.name}
+                  to={item.path}
+                  className={`px-3 py-2 text-base font-semibold transition
+                    ${isActive(item.path)
+                      ? "text-techgold border-b-2 border-techgold"
+                      : "text-gray-700 hover:text-techgold hover:bg-gray-100"}`}
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
-            
-            {/* CTA Button - Kept techblue for distinction */}
+
             <Link to="/dashboard">
-              <Button className="ml-4 bg-techblue hover:bg-techblue-dark shadow-lg transition-transform hover:scale-[1.03]">
-                Member Login
-              </Button>
+              <Button className="ml-4 bg-techblue hover:bg-techblue-dark shadow-lg">Member Login</Button>
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-techgold hover:bg-gray-100 transition-colors"
-              aria-label="Toggle mobile menu"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden">
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
         </div>
       </div>
 
-      {/* 📱 3. Mobile Navigation */}
+      {/* MOBILE MENU */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white py-2 px-4 shadow-lg absolute w-full z-40">
-          <div className="flex flex-col space-y-2">
-            
-            {/* Primary Links */}
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isActive(item.path)
-                    ? "text-techgold font-bold bg-techgold/10"
-                    : "text-gray-700 hover:text-techgold hover:bg-gray-50"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
+        <div className="md:hidden bg-white py-2 px-4 shadow-lg absolute w-full">
+
+          {navItems.map(item => (
+            item.dropdown ? (
+              <div key={item.name}>
+                <button
+                  onClick={() => {
+                    if (item.name === "Projects") {
+                      setMobileProjectsOpen(!mobileProjectsOpen);
+                      setMobileAboutOpen(false);
+                    } else {
+                      setMobileAboutOpen(!mobileAboutOpen);
+                      setMobileProjectsOpen(false);
+                    }
+                  }}
+                  className="flex justify-between w-full px-3 py-2 font-medium text-gray-700 hover:text-techgold"
+                >
+                  {item.name} <ChevronDown />
+                </button>
+
+                {item.name === "Projects" && mobileProjectsOpen && (
+                  <div className="pl-4 space-y-2">
+                    {projectDropdownLinks.map(sub => (
+                      <Link key={sub.name} to={sub.path} className="block text-sm hover:text-techgold">
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {item.name === "About" && mobileAboutOpen && (
+                  <div className="pl-4 space-y-2">
+                    {aboutDropdownLinks.map(sub => (
+                      <Link key={sub.name} to={sub.path} className="block text-sm hover:text-techgold">
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link key={item.name} to={item.path} className="block px-3 py-2 hover:text-techgold">
                 {item.name}
               </Link>
-            ))}
+            )
+          ))}
 
-            {/* Utility Links in Mobile */}
-            <div className="pt-2 border-t border-gray-100 space-y-1">
-              {utilityItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="flex items-center px-3 py-2 rounded-md text-base text-gray-700 hover:text-techgold hover:bg-gray-50"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.icon}
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-
-            {/* Contacts in Mobile */}
-            <div className="flex flex-col space-y-2 mt-4 text-sm pt-4 border-t border-gray-100">
-                <a href={`tel:${CONTACT_PHONE}`} className="flex items-center text-gray-700 hover:text-techgold">
-                    <Phone className="h-4 w-4 mr-2 text-techgold" /> Call: {CONTACT_PHONE}
-                </a>
-                <a href={`mailto:${CONTACT_EMAIL}`} className="flex items-center text-gray-700 hover:text-techgold">
-                    <Mail className="h-4 w-4 mr-2 text-techgold" /> Email: {CONTACT_EMAIL}
-                </a>
-            </div>
-
-            {/* CTA Button */}
-            <Link 
-              to="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Button className="mt-4 w-full bg-techblue hover:bg-techblue-dark shadow-lg">
-                Member Login
-              </Button>
-            </Link>
-          </div>
+          <Link to="/dashboard">
+            <Button className="mt-4 w-full bg-techblue hover:bg-techblue-dark">Member Login</Button>
+          </Link>
         </div>
       )}
     </nav>

@@ -33,7 +33,7 @@ const TestimonialsSection = () => {
         <SectionTitle 
           title="What Our Members Say" 
           subtitle="Hear from our community members about their experiences with Tech Team"
-          centered
+          centered={true}
           icon={<MessageSquareQuote className="h-6 w-6 text-techgold" />} // Added icon for visual interest
         />
         
