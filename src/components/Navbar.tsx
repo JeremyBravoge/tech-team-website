@@ -205,52 +205,74 @@ const Navbar = () => {
       </div>
 
       {/* MOBILE MENU */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white px-4 py-3 shadow-lg space-y-2">
-          {navItems.map(item =>
-            item.dropdown ? (
-              <div key={item.name}>
-                <button
-                  onClick={() => {
-                    setMobileProjectsOpen(item.name === "Projects" ? !mobileProjectsOpen : false);
-                    setMobileAboutOpen(item.name === "About" ? !mobileAboutOpen : false);
-                    setMobileMediaOpen(item.name === "Media" ? !mobileMediaOpen : false);
-                  }}
-                  className="w-full flex justify-between text-sm py-2 text-gray-700"
-                >
-                  {item.name} <ChevronDown />
-                </button>
+{mobileMenuOpen && (
+  <div className="md:hidden bg-techgold px-4 py-4 shadow-lg space-y-2">
+    {navItems.map(item => (
+      <div key={item.name} className="border-b border-techgold-dark">
+        {item.dropdown ? (
+          <>
+            <button
+              onClick={() => {
+                setMobileProjectsOpen(item.name === "Projects" ? !mobileProjectsOpen : false);
+                setMobileAboutOpen(item.name === "About" ? !mobileAboutOpen : false);
+                setMobileMediaOpen(item.name === "Media" ? !mobileMediaOpen : false);
+              }}
+              className="w-full flex justify-between items-center py-3 text-sm font-medium text-white"
+            >
+              {item.name}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-300 ${
+                  (item.name === "Projects" && mobileProjectsOpen) ||
+                  (item.name === "About" && mobileAboutOpen) ||
+                  (item.name === "Media" && mobileMediaOpen)
+                    ? "rotate-180"
+                    : ""
+                }`}
+              />
+            </button>
 
+            {(item.name === "Projects"
+              ? mobileProjectsOpen
+              : item.name === "About"
+              ? mobileAboutOpen
+              : mobileMediaOpen) && (
+              <div className="pl-4 pb-2 space-y-1">
                 {(item.name === "Projects"
-                  ? mobileProjectsOpen
+                  ? projectLinks
                   : item.name === "About"
-                  ? mobileAboutOpen
-                  : mobileMediaOpen) && (
-                  <div className="pl-4 space-y-1">
-                    {(item.name === "Projects"
-                      ? projectLinks
-                      : item.name === "About"
-                      ? aboutLinks
-                      : mediaLinks).map(sub => (
-                      <Link key={sub.name} to={sub.path} className="block text-xs py-1 hover:text-techgold">
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                  ? aboutLinks
+                  : mediaLinks
+                ).map(sub => (
+                  <Link
+                    key={sub.name}
+                    to={sub.path}
+                    className="block text-white text-sm py-1 hover:text-techblue"
+                  >
+                    {sub.name}
+                  </Link>
+                ))}
               </div>
-            ) : (
-              <Link key={item.name} to={item.path} className="block text-sm py-2">
-                {item.name}
-              </Link>
-            )
-          )}
-
-          <Link to="/dashboard">
-            <Button className="w-full mt-3">Member Login</Button>
+            )}
+          </>
+        ) : (
+          <Link
+            key={item.name}
+            to={item.path}
+            className="block py-3 text-white text-sm hover:text-techblue"
+          >
+            {item.name}
           </Link>
-        </div>
-      )}
+        )}
+      </div>
+    ))}
+
+    <Link to="/dashboard">
+      <Button className="w-full mt-3 bg-white text-techgold hover:bg-gray-100">
+        Member Login
+      </Button>
+    </Link>
+  </div>
+)}
     </nav>
   );
 };

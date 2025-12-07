@@ -58,8 +58,6 @@ const QuickLinksSection = () => {
           title="Quick Links" 
           subtitle="Find what you're looking for with these handy shortcuts to popular sections"
           centered
-          // Added a small icon for visual interest
-          icon={<ArrowRight className="h-6 w-6 text-techgold" />}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
