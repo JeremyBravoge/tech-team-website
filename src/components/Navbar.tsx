@@ -44,6 +44,7 @@ const Navbar = () => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
 
+  /* ================= CLICK OUTSIDE TO CLOSE DESKTOP MENU ================= */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -209,14 +210,14 @@ const Navbar = () => {
           {navItems.map(item => (
             <div key={item.name} className="border-b border-techgold-dark">
 
-              {/* DROPDOWN ITEMS */}
+              {/* DROPDOWN HANDLING */}
               {item.dropdown ? (
                 <>
                   <button
                     onClick={() => {
-                      setMobileProjectsOpen(item.name === "Projects" ? !mobileProjectsOpen : false);
-                      setMobileAboutOpen(item.name === "About" ? !mobileAboutOpen : false);
-                      setMobileMediaOpen(item.name === "Media" ? !mobileMediaOpen : false);
+                      if (item.name === "Projects") setMobileProjectsOpen(!mobileProjectsOpen);
+                      if (item.name === "About") setMobileAboutOpen(!mobileAboutOpen);
+                      if (item.name === "Media") setMobileMediaOpen(!mobileMediaOpen);
                     }}
                     className="w-full flex justify-between items-center py-3 text-sm font-medium text-gray-900"
                   >
@@ -237,7 +238,7 @@ const Navbar = () => {
                     : item.name === "About"
                     ? mobileAboutOpen
                     : mobileMediaOpen) && (
-                    <div className="ml-4 mt-2 mb-3 rounded-lg bg-white p-3 shadow-md space-y-2">
+                   <div className="ml-4 mt-2 mb-3 rounded-lg bg-white p-3 shadow-md space-y-2">
                       {(item.name === "Projects"
                         ? projectLinks
                         : item.name === "About"
@@ -247,6 +248,12 @@ const Navbar = () => {
                         <Link
                           key={sub.name}
                           to={sub.path}
+                          onClick={() => {
+                            setMobileProjectsOpen(false);
+                            setMobileAboutOpen(false);
+                            setMobileMediaOpen(false);
+                            setMobileMenuOpen(false);
+                          }}
                           className="flex items-center gap-3 px-2 py-2 text-sm text-gray-800 hover:text-techgold"
                         >
                           {sub.icon}
@@ -259,6 +266,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}   // 🔥 CLOSE MENU WHEN CLICKED
                   className="block py-3 text-gray-900 text-sm hover:text-techblue"
                 >
                   {item.name}
