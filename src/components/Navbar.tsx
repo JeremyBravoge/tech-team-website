@@ -157,8 +157,7 @@ const Navbar = () => {
                 {(item.name === "Projects" && projectsDropdown) ||
                 (item.name === "About" && aboutDropdown) ||
                 (item.name === "Media" && mediaDropdown) ? (
-                  <div className="absolute left-0 mt-3 w-[540px] grid grid-cols-2 gap-2
-                    rounded-xl bg-white p-4 border shadow-xl animate-in fade-in slide-in-from-top-2">
+                  <div className="absolute left-0 mt-3 w-[540px] grid grid-cols-2 gap-2 rounded-xl bg-white p-4 border shadow-xl">
                     {(item.name === "Projects"
                       ? projectLinks
                       : item.name === "About"
@@ -168,8 +167,7 @@ const Navbar = () => {
                       <Link
                         key={link.name}
                         to={link.path}
-                        className="flex items-center gap-3 px-3 py-2 text-sm rounded-md
-                        hover:bg-gray-50 hover:text-techgold transition"
+                        className="flex items-center gap-3 px-3 py-2 text-sm rounded-md hover:bg-gray-50 hover:text-techgold transition"
                       >
                         {link.icon} {link.name}
                       </Link>
@@ -205,74 +203,77 @@ const Navbar = () => {
       </div>
 
       {/* MOBILE MENU */}
-{mobileMenuOpen && (
-  <div className="md:hidden bg-techgold px-4 py-4 shadow-lg space-y-2">
-    {navItems.map(item => (
-      <div key={item.name} className="border-b border-techgold-dark">
-        {item.dropdown ? (
-          <>
-            <button
-              onClick={() => {
-                setMobileProjectsOpen(item.name === "Projects" ? !mobileProjectsOpen : false);
-                setMobileAboutOpen(item.name === "About" ? !mobileAboutOpen : false);
-                setMobileMediaOpen(item.name === "Media" ? !mobileMediaOpen : false);
-              }}
-              className="w-full flex justify-between items-center py-3 text-sm font-medium text-white"
-            >
-              {item.name}
-              <ChevronDown
-                className={`w-4 h-4 transition-transform duration-300 ${
-                  (item.name === "Projects" && mobileProjectsOpen) ||
-                  (item.name === "About" && mobileAboutOpen) ||
-                  (item.name === "Media" && mobileMediaOpen)
-                    ? "rotate-180"
-                    : ""
-                }`}
-              />
-            </button>
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-techgold px-4 py-4 shadow-lg space-y-2">
 
-            {(item.name === "Projects"
-              ? mobileProjectsOpen
-              : item.name === "About"
-              ? mobileAboutOpen
-              : mobileMediaOpen) && (
-              <div className="pl-4 pb-2 space-y-1">
-                {(item.name === "Projects"
-                  ? projectLinks
-                  : item.name === "About"
-                  ? aboutLinks
-                  : mediaLinks
-                ).map(sub => (
-                  <Link
-                    key={sub.name}
-                    to={sub.path}
-                    className="block text-white text-sm py-1 hover:text-techblue"
+          {navItems.map(item => (
+            <div key={item.name} className="border-b border-techgold-dark">
+
+              {/* DROPDOWN ITEMS */}
+              {item.dropdown ? (
+                <>
+                  <button
+                    onClick={() => {
+                      setMobileProjectsOpen(item.name === "Projects" ? !mobileProjectsOpen : false);
+                      setMobileAboutOpen(item.name === "About" ? !mobileAboutOpen : false);
+                      setMobileMediaOpen(item.name === "Media" ? !mobileMediaOpen : false);
+                    }}
+                    className="w-full flex justify-between items-center py-3 text-sm font-medium text-gray-900"
                   >
-                    {sub.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <Link
-            key={item.name}
-            to={item.path}
-            className="block py-3 text-white text-sm hover:text-techblue"
-          >
-            {item.name}
-          </Link>
-        )}
-      </div>
-    ))}
+                    {item.name}
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${
+                        (item.name === "Projects" && mobileProjectsOpen) ||
+                        (item.name === "About" && mobileAboutOpen) ||
+                        (item.name === "Media" && mobileMediaOpen)
+                          ? "rotate-180"
+                          : ""
+                      }`}
+                    />
+                  </button>
 
-    <Link to="/dashboard">
-      <Button className="w-full mt-3 bg-white text-techgold hover:bg-gray-100">
-        Member Login
-      </Button>
-    </Link>
-  </div>
-)}
+                  {(item.name === "Projects"
+                    ? mobileProjectsOpen
+                    : item.name === "About"
+                    ? mobileAboutOpen
+                    : mobileMediaOpen) && (
+                    <div className="ml-4 mt-2 mb-3 rounded-lg bg-white p-3 shadow-md space-y-2">
+                      {(item.name === "Projects"
+                        ? projectLinks
+                        : item.name === "About"
+                        ? aboutLinks
+                        : mediaLinks
+                      ).map(sub => (
+                        <Link
+                          key={sub.name}
+                          to={sub.path}
+                          className="flex items-center gap-3 px-2 py-2 text-sm text-gray-800 hover:text-techgold"
+                        >
+                          {sub.icon}
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  to={item.path}
+                  className="block py-3 text-gray-900 text-sm hover:text-techblue"
+                >
+                  {item.name}
+                </Link>
+              )}
+            </div>
+          ))}
+
+          <Link to="/dashboard">
+            <Button className="w-full mt-3 bg-white text-techgold hover:bg-gray-100">
+              Member Login
+            </Button>
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };
